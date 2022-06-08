@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Local Trader</string>
+    <string name="network_error">Network not available</string>
+    <string name="base_api_url">https://127.0.0.1:14443</string>
+</resources>
