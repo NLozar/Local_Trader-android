@@ -2,11 +2,11 @@ package com.example.localtrader;
 
 import android.content.res.Resources;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -55,12 +55,27 @@ public class RequestHandler {
         this.conn.setRequestProperty("Accept", "application/json");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        InputStream resIs = this.conn.getInputStream();
-        byte[] resByteArr = new byte[resIs.available()];
-        DataInputStream resDis = new DataInputStream(resIs);
-        resDis.readFully(resByteArr);
-        String resJsonString = new String(resByteArr, StandardCharsets.UTF_8);
         HashMap<String, String> resHm = new HashMap<String, String>();
         return resHm;
+    }
+
+    private static String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
     }
 }
