@@ -2,6 +2,9 @@ package com.example.localtrader;
 
 import android.content.res.Resources;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +15,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.HashMap;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -49,14 +51,15 @@ public class RequestHandler {
         this.conn.setConnectTimeout(10000);
     }
 
-    public HashMap<String, String> sendRequest() throws IOException {
+    public JsonNode sendRequest() throws IOException {
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        HashMap<String, String> resHm = new HashMap<String, String>();
-        return resHm;
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(this.conn.getInputStream());
+        return jsonNode;
     }
 
     private static String convertStreamToString(InputStream is) {
