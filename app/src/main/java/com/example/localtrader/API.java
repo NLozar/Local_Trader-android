@@ -5,21 +5,19 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class API {
 
-    private final String url;
     private final Activity callerActivity;
     private final RequestHandler requestHandler;
 
-    public API(String url, Activity callerActivity, RequestHandler requestHandler) {
-        this.url = url;
+    public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
     }
 
-    public String execute() {
+    public String execute(Object responseBuffer) {
         ConnectivityManager connMgr = (ConnectivityManager) callerActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo;
         try {
@@ -30,8 +28,9 @@ public class API {
         }
         if (networkInfo != null && networkInfo.isConnected()) {
             try {
-                return "TODO";// TODO
-                //return requestHandler.sendRequest();
+                JsonNode resJn = this.requestHandler.sendGetRequest();
+                responseBuffer = DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
+                return "Connection successful";
             } catch (Exception e) {
                 return callerActivity.getResources().getString(R.string.network_error);
             }

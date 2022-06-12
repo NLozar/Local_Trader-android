@@ -51,15 +51,14 @@ public class RequestHandler {
         this.conn.setConnectTimeout(10000);
     }
 
-    public JsonNode sendRequest() throws IOException {
+    public JsonNode sendGetRequest() throws IOException {
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(this.conn.getInputStream());
-        return jsonNode;
+        return objectMapper.readTree(this.conn.getInputStream());
     }
 
     private static String convertStreamToString(InputStream is) {
