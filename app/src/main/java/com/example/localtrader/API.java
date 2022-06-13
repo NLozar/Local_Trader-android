@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -15,6 +16,7 @@ public class API {
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
+        Log.i(this.getClass().getSimpleName(), "Constructor called");
     }
 
     public String execute(Object responseBuffer) {
@@ -30,7 +32,7 @@ public class API {
             try {
                 JsonNode resJn = this.requestHandler.sendGetRequest();
                 responseBuffer = DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
-                return "Connection successful";
+                return "Success";
             } catch (Exception e) {
                 return callerActivity.getResources().getString(R.string.network_error);
             }

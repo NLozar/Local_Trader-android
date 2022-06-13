@@ -1,5 +1,6 @@
 package com.example.localtrader;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,11 +28,11 @@ public class RequestHandler {
     private String apiBaseUrl;
     private HttpsURLConnection conn;
 
-    public RequestHandler(String apiBaseUrl) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    public RequestHandler(Context ctx, String apiBaseUrl) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         this.apiBaseUrl = apiBaseUrl;
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         char[] kspw = "tnuvhl".toCharArray();
-        ks.load(Resources.getSystem().openRawResource(R.raw.keystore), kspw);
+        ks.load(ctx.getResources().openRawResource(R.raw.keystore), kspw);
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init(ks);
         SSLContext sslContext = SSLContext.getInstance("TLS");
