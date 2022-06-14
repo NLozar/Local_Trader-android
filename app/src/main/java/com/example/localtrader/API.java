@@ -26,6 +26,7 @@ public class API {
             networkInfo = connMgr.getActiveNetworkInfo();
         }
         catch (Exception e){
+            Log.e(this.getClass().getSimpleName(), "Couldn't get active network info.");
             return callerActivity.getResources().getString(R.string.network_error);
         }
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -34,10 +35,13 @@ public class API {
                 responseBuffer = DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
                 return "Success";
             } catch (Exception e) {
+                Log.e(this.getClass().getSimpleName(), "Request failed.");
+                e.printStackTrace();
                 return callerActivity.getResources().getString(R.string.network_error);
             }
         }
         else{
+            Log.e(this.getClass().getSimpleName(), "Network not connected");
             return callerActivity.getResources().getString(R.string.network_error);
         }
     }

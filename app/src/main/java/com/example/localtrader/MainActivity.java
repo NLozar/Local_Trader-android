@@ -31,26 +31,13 @@ public class MainActivity extends AppCompatActivity {
             Log.e(this.getClass().getSimpleName(), "RequestHandler or API creation creation crapped the bed");
             e.printStackTrace();
         }
-        Object apiRes = api.execute(this.allItemsViewEntries);
-        if (apiRes.getClass() == this.allItemsViewEntries.getClass()) {
-            this.allItemsViewEntries = (ArrayList<AllItemsViewEntry>) apiRes;
+        String apiRes = api.execute(this.allItemsViewEntries);
+        if (apiRes.equals("Success")) {
+            this.itemsList = findViewById(R.id.itemsList);
+            AllItemsViewAdapter allItemsViewAdapter = new AllItemsViewAdapter(this, this.allItemsViewEntries);
+            this.itemsList.setAdapter(allItemsViewAdapter);
         } else {
-            try {
-                Toast toast = Toast.makeText(this, (String) apiRes, Toast.LENGTH_LONG);
-                toast.show();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            Toast.makeText(this, R.string.network_error, Toast.LENGTH_LONG).show();
         }
-        this.itemsList = findViewById(R.id.itemsList);
-        AllItemsViewAdapter allItemsViewAdapter = new AllItemsViewAdapter(this, this.allItemsViewEntries);
-        this.itemsList.setAdapter(allItemsViewAdapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setContentView(R.layout.activity_main);
     }
 }
