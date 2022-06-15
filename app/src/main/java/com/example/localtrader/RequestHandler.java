@@ -1,8 +1,6 @@
 package com.example.localtrader;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,23 +56,12 @@ public class RequestHandler {
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
-        final InputStream[] resIs = new InputStream[1];
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
-                    conn.connect();
-                    int responseCode = conn.getResponseCode(); // blocks further execution until response
-                    resIs[0] = conn.getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        //this.conn.connect();
+        Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readTree(resIs[0]);
+        return objectMapper.readTree(this.conn.getInputStream());
     }
 
     private static String convertStreamToString(InputStream is) {

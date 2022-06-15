@@ -11,13 +11,14 @@ import java.util.ArrayList;
 
 public class AllItemsViewAdapter extends BaseAdapter {
 
-    Context ctx;
-    ArrayList<AllItemsViewEntry> allItemsViewEntries;
-    LayoutInflater inflater;
+    private Context ctx;
+    private ArrayList<AllItemsViewEntry> allItemsViewEntries;
+    private LayoutInflater inflater;
 
     public AllItemsViewAdapter(Context ctx, ArrayList<AllItemsViewEntry> allItemsViewEntries) {
         this.ctx = ctx;
         this.allItemsViewEntries = allItemsViewEntries;
+        this.inflater = LayoutInflater.from(ctx);
     }
 
     @Override

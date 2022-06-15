@@ -19,7 +19,7 @@ public class API {
         Log.i(this.getClass().getSimpleName(), "Constructor called");
     }
 
-    public String execute(Object responseBuffer) {
+    public Object execute() {
         ConnectivityManager connMgr = (ConnectivityManager) callerActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo;
         try {
@@ -32,8 +32,9 @@ public class API {
         if (networkInfo != null && networkInfo.isConnected()) {
             try {
                 JsonNode resJn = this.requestHandler.sendGetRequest();
-                responseBuffer = DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
-                return "Success";
+                return DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
+                //Log.i(this.getClass().getSimpleName(), "responseBuffer: " + responseBuffer.toString());
+                //return "Success";
             } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Request failed.");
                 e.printStackTrace();

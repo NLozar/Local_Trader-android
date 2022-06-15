@@ -19,14 +19,14 @@
         app:layout_constraintTop_toTopOf="@+id/linearLayout">
 
         <Button
-            android:id="@+id/btn_myArticles"
+            android:id="@+id/btn_myItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_logInOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
