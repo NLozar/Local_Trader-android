@@ -74,7 +74,23 @@ public class MainActivity extends AppCompatActivity {
                     SetAdapterOnUiThread setAdapterOnUiThread = new SetAdapterOnUiThread(listView, allItemsViewAdapter);
                     runOnUiThread(setAdapterOnUiThread);
                 } else {
-                    Toast.makeText(this.ctx, R.string.network_error, Toast.LENGTH_LONG).show();
+                    class RunnableToast implements Runnable {
+                        private Context ctx;
+                        private int redId;
+                        private int duration;
+
+                        public RunnableToast(Context ctx, int resId, int duration) {
+                            this.ctx = ctx;
+                            this.redId = resId;
+                            this.duration = duration;
+                        }
+                        @Override
+                        public void run() {
+                            Toast.makeText(this.ctx, this.redId, this.duration).show();
+                        }
+                    }
+                    RunnableToast runnableToast = new RunnableToast(this.ctx, R.string.network_error, Toast.LENGTH_LONG);
+                    runOnUiThread(runnableToast);
                 }
             }
         }
