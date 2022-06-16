@@ -1,5 +1,6 @@
 package com.example.localtrader;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -25,14 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
         class RunnableApiCall implements Runnable {
             private Context ctx;
-            private ListView listView;
             private API api;
             private Activity callerActivity;
 
-            public RunnableApiCall(Context ctx, Activity callerActivity, ListView listView) {
+            public RunnableApiCall(Context ctx, Activity callerActivity) {
                 this.ctx = ctx;
                 this.callerActivity = callerActivity;
-                this.listView = listView;
                 try {
                     RequestHandler requestHandler = new RequestHandler(this.ctx, this.ctx.getResources().getString(R.string.base_api_url));
                     this.api = new API(this.callerActivity, requestHandler);
@@ -42,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            @NonNull
             @Override
             public String toString() {
                 return "RunnableApiCall{" +
                         "ctx=" + ctx +
-                        ", listView=" + listView +
                         ", api=" + api +
                         ", callerActivity=" + callerActivity +
                         '}';
@@ -57,15 +56,30 @@ public class MainActivity extends AppCompatActivity {
                 Object responseObj = this.api.execute();
                 if (!responseObj.getClass().equals(String.class)) {
                     AllItemsViewAdapter allItemsViewAdapter = new AllItemsViewAdapter(this.ctx, (ArrayList<AllItemsViewEntry>) responseObj);
-                    this.listView.setAdapter(allItemsViewAdapter);
+                    ListView listView = findViewById(R.id.itemsList);
+
+                    class SetAdapterOnUiThread implements Runnable {
+                        private ListView listView;
+                        private AllItemsViewAdapter adapter;
+                        public SetAdapterOnUiThread(ListView listView, AllItemsViewAdapter adapter) {
+                            this.listView = listView;
+                            this.adapter = adapter;
+                        }
+
+                        @Override
+                        public void run() {
+                            this.listView.setAdapter(this.adapter);
+                        }
+                    }
+                    SetAdapterOnUiThread setAdapterOnUiThread = new SetAdapterOnUiThread(listView, allItemsViewAdapter);
+                    runOnUiThread(setAdapterOnUiThread);
                 } else {
                     Toast.makeText(this.ctx, R.string.network_error, Toast.LENGTH_LONG).show();
                 }
             }
         }
 
-        ListView itemsList = findViewById(R.id.itemsList);
-        Runnable runnableApiCall = new RunnableApiCall(this, this, itemsList);
+        Runnable runnableApiCall = new RunnableApiCall(this, this);
         Log.i(this.getClass().getSimpleName(), "runnableApiCall: " + runnableApiCall);
         new Thread(runnableApiCall).start();
     }
