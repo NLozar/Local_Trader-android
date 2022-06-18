@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public String toString() {
                 return "RunnableApiCall{" +
-                        "ctx=" + ctx +
-                        ", api=" + api +
-                        ", callerActivity=" + callerActivity +
+                        "ctx=" + this.ctx +
+                        ", api=" + this.api +
+                        ", callerActivity=" + this.callerActivity +
                         '}';
             }
 
@@ -58,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
                     AllItemsViewAdapter allItemsViewAdapter = new AllItemsViewAdapter(this.ctx, (ArrayList<AllItemsViewEntry>) responseObj);
                     ListView listView = findViewById(R.id.itemsList);
 
-                    class SetAdapterOnUiThread implements Runnable {
+                    class RunnableAllItemsViewAdapterSetter implements Runnable {
                         private ListView listView;
                         private AllItemsViewAdapter adapter;
-                        public SetAdapterOnUiThread(ListView listView, AllItemsViewAdapter adapter) {
+                        public RunnableAllItemsViewAdapterSetter(ListView listView, AllItemsViewAdapter adapter) {
                             this.listView = listView;
                             this.adapter = adapter;
                         }
@@ -69,34 +72,35 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             this.listView.setAdapter(this.adapter);
-                        }
-                    }
-                    SetAdapterOnUiThread setAdapterOnUiThread = new SetAdapterOnUiThread(listView, allItemsViewAdapter);
-                    runOnUiThread(setAdapterOnUiThread);
-                } else {
-                    class RunnableToast implements Runnable {
-                        private Context ctx;
-                        private int redId;
-                        private int duration;
+                            class ItemListener implements AdapterView.OnItemClickListener {
+                                private AllItemsViewAdapter adapter;
 
-                        public RunnableToast(Context ctx, int resId, int duration) {
-                            this.ctx = ctx;
-                            this.redId = resId;
-                            this.duration = duration;
-                        }
-                        @Override
-                        public void run() {
-                            Toast.makeText(this.ctx, this.redId, this.duration).show();
+                                public ItemListener(AllItemsViewAdapter adapter) {
+                                    this.adapter = adapter;
+                                }
+
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    Log.i(this.getClass().getSimpleName(), "Item got clicked: " + this.adapter.getUuid(i));
+                                    Intent intentDetails = new Intent(ctx, DetailsActivity.class); // Risky AF. ctx comes from outside of the class
+                                    intentDetails.putExtra("uuid", this.adapter.getUuid(i));
+                                    startActivity(intentDetails);
+                                }
+                            }
+                            ItemListener itemListener = new ItemListener(this.adapter);
+                            this.listView.setOnItemClickListener(itemListener);
                         }
                     }
-                    RunnableToast runnableToast = new RunnableToast(this.ctx, R.string.network_error, Toast.LENGTH_LONG);
-                    runOnUiThread(runnableToast);
+                    RunnableAllItemsViewAdapterSetter runnableAllItemsViewAdapterSetter = new RunnableAllItemsViewAdapterSetter(listView, allItemsViewAdapter);
+                    runOnUiThread(runnableAllItemsViewAdapterSetter);
+                } else {
+                    RunnableToast runnableToastNetErr = new RunnableToast(this.ctx, R.string.network_error, Toast.LENGTH_LONG);
+                    runOnUiThread(runnableToastNetErr);
                 }
             }
         }
 
         Runnable runnableApiCall = new RunnableApiCall(this, this);
-        Log.i(this.getClass().getSimpleName(), "runnableApiCall: " + runnableApiCall);
         new Thread(runnableApiCall).start();
     }
 }

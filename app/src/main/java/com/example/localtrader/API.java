@@ -31,7 +31,7 @@ public class API {
         }
         if (networkInfo != null && networkInfo.isConnected()) {
             try {
-                JsonNode resJn = this.requestHandler.sendGetRequest();
+                JsonNode resJn = this.requestHandler.getAllItems();
                 return DataHandler.jsonNodeToAllItemsViewEntryArrayList(resJn);
                 //Log.i(this.getClass().getSimpleName(), "responseBuffer: " + responseBuffer.toString());
                 //return "Success";

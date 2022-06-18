@@ -17,9 +17,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:paddingTop="10dp"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:maxLength="27"
-            android:textSize="20dp"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/list_entry_descr"
@@ -28,7 +28,7 @@
             android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:paddingBottom="10dp"
             android:maxHeight="50dp"
             android:maxLines="2"/>
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:paddingTop="10dp"
             android:maxLength="18"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

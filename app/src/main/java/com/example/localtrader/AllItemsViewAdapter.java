@@ -33,7 +33,11 @@ public class AllItemsViewAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return -1;
+    }
+
+    public String getUuid(int i) {
+        return this.allItemsViewEntries.get(i).getUuid();
     }
 
     @Override

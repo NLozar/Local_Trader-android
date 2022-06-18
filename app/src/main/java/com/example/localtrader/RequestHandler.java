@@ -27,6 +27,7 @@ public class RequestHandler {
 
     private String apiBaseUrl;
     private HttpsURLConnection conn;
+    private SSLContext sslContext;
 
     public RequestHandler(Context ctx, String apiBaseUrl) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         this.apiBaseUrl = apiBaseUrl;
@@ -35,8 +36,8 @@ public class RequestHandler {
         ks.load(ctx.getResources().openRawResource(R.raw.keystore), kspw);
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init(ks);
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+        this.sslContext = SSLContext.getInstance("TLS");
+        this.sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
         HostnameVerifier allHostsValid = new HostnameVerifier() {
             @Override
@@ -45,14 +46,13 @@ public class RequestHandler {
             }
         };
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
-        this.conn = (HttpsURLConnection) new URL(this.apiBaseUrl).openConnection();
-        this.conn.setSSLSocketFactory(sslContext.getSocketFactory());
-        this.conn.setReadTimeout(5000);
-        this.conn.setConnectTimeout(10000);
     }
 
-    public JsonNode sendGetRequest() throws IOException {
+    public JsonNode getAllItems() throws IOException {
+        this.conn = (HttpsURLConnection) new URL(this.apiBaseUrl).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
