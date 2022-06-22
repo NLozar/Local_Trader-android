@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         class RunnableApiCall implements Runnable {
-            private Context ctx;
+            private final Context ctx;
             private API api;
-            private Activity callerActivity;
+            private final Activity callerActivity;
 
             public RunnableApiCall(Context ctx, Activity callerActivity) {
                 this.ctx = ctx;
@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                Object responseObj = this.api.execute();
+                Object responseObj = this.api.getAllItems();
                 if (!responseObj.getClass().equals(String.class)) {
                     AllItemsViewAdapter allItemsViewAdapter = new AllItemsViewAdapter(this.ctx, (ArrayList<AllItemsViewEntry>) responseObj);
                     ListView listView = findViewById(R.id.itemsList);
 
                     class RunnableAllItemsViewAdapterSetter implements Runnable {
-                        private ListView listView;
-                        private AllItemsViewAdapter adapter;
+                        private final ListView listView;
+                        private final AllItemsViewAdapter adapter;
                         public RunnableAllItemsViewAdapterSetter(ListView listView, AllItemsViewAdapter adapter) {
                             this.listView = listView;
                             this.adapter = adapter;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             this.listView.setAdapter(this.adapter);
                             class ItemListener implements AdapterView.OnItemClickListener {
-                                private AllItemsViewAdapter adapter;
+                                private final AllItemsViewAdapter adapter;
 
                                 public ItemListener(AllItemsViewAdapter adapter) {
                                     this.adapter = adapter;
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Runnable runnableApiCall = new RunnableApiCall(this, this);
+        RunnableApiCall runnableApiCall = new RunnableApiCall(this, this);
         new Thread(runnableApiCall).start();
     }
 }

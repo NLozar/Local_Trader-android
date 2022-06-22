@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DataHandler {
+
     public static ArrayList<AllItemsViewEntry> jsonNodeToAllItemsViewEntryArrayList(JsonNode jsonNode) {
         ArrayList<AllItemsViewEntry> out = new ArrayList<>();
         Iterator<JsonNode> itr = jsonNode.iterator();
@@ -22,5 +23,16 @@ public class DataHandler {
             out.add(currAive);
         }
         return out;
+    }
+
+    public static ItemDetailsDataHolder jsonNodeToItemDetailsDataHolder(JsonNode jn) {
+        return new ItemDetailsDataHolder(
+                jn.get("title").textValue(),
+                jn.get("seller").textValue(),
+                jn.get("price").textValue(),
+                jn.get("descr").textValue(),
+                jn.get("contact").textValue(),
+                jn.get("uuid").textValue()
+        );
     }
 }

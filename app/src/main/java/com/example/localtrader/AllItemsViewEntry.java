@@ -1,10 +1,12 @@
 package com.example.localtrader;
 
+import androidx.annotation.NonNull;
+
 public class AllItemsViewEntry {
-    private String title;
-    private String price;
-    private String descr;
-    private String uuid;
+    private final String title;
+    private final String price;
+    private final String descr;
+    private final String uuid;
 
     public AllItemsViewEntry(String title, String price, String descr, String uuid) {
         this.title = title;
@@ -29,6 +31,7 @@ public class AllItemsViewEntry {
         return uuid;
     }
 
+    @NonNull
     @Override
     public String toString() {
         // only for debugging

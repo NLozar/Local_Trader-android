@@ -25,9 +25,9 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class RequestHandler {
 
-    private String apiBaseUrl;
+    private final String apiBaseUrl;
     private HttpsURLConnection conn;
-    private SSLContext sslContext;
+    private final SSLContext sslContext;
 
     public RequestHandler(Context ctx, String apiBaseUrl) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         this.apiBaseUrl = apiBaseUrl;
@@ -49,13 +49,32 @@ public class RequestHandler {
     }
 
     public JsonNode getAllItems() throws IOException {
-        this.conn = (HttpsURLConnection) new URL(this.apiBaseUrl).openConnection();
+        String url = this.apiBaseUrl + "/itemsList";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
         this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
         this.conn.setReadTimeout(5000);
         this.conn.setConnectTimeout(10000);
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
+        Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readTree(this.conn.getInputStream());
+    }
+
+    public JsonNode getItemDetails(String itemUuid) throws IOException {
+        String url = this.apiBaseUrl + "/itemDetails";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("GET");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("uuid", itemUuid);
         Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response

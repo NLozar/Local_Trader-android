@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Local Trader</string>
     <string name="network_error">Network error</string>
-    <string name="base_api_url">https://192.168.1.147:14443/itemsList</string>
+    <string name="base_api_url">https://192.168.1.147:14443</string>
 </resources>
