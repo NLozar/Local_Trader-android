@@ -73,7 +73,7 @@ public class API {
             } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Request failed.");
                 e.printStackTrace();
-                return callerActivity.getResources().getString(R.string.network_error);
+                return callerActivity.getResources().getString(R.string.request_failure);
             }
         }
         else{

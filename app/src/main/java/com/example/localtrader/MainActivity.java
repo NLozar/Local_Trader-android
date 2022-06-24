@@ -2,6 +2,7 @@ package com.example.localtrader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
             private final Context ctx;
             private API api;
             private final Activity callerActivity;
+            private final SwipeRefreshLayout swipeRefreshLayout;
 
-            public RunnableApiCall(Context ctx, Activity callerActivity) {
+            public RunnableApiCall(Context ctx, Activity callerActivity, SwipeRefreshLayout swipeRefreshLayout) {
                 this.ctx = ctx;
                 this.callerActivity = callerActivity;
+                this.swipeRefreshLayout = swipeRefreshLayout;
                 try {
                     RequestHandler requestHandler = new RequestHandler(this.ctx, this.ctx.getResources().getString(R.string.base_api_url));
                     this.api = new API(this.callerActivity, requestHandler);
@@ -64,14 +67,19 @@ public class MainActivity extends AppCompatActivity {
                     class RunnableAllItemsViewAdapterSetter implements Runnable {
                         private final ListView listView;
                         private final AllItemsViewAdapter adapter;
-                        public RunnableAllItemsViewAdapterSetter(ListView listView, AllItemsViewAdapter adapter) {
+                        private final SwipeRefreshLayout swipeRefreshLayout;
+
+                        public RunnableAllItemsViewAdapterSetter(ListView listView, AllItemsViewAdapter adapter, SwipeRefreshLayout swipeRefreshLayout) {
                             this.listView = listView;
                             this.adapter = adapter;
+                            this.swipeRefreshLayout = swipeRefreshLayout;
                         }
 
                         @Override
                         public void run() {
                             this.listView.setAdapter(this.adapter);
+                            this.swipeRefreshLayout.setRefreshing(false);
+
                             class ItemListener implements AdapterView.OnItemClickListener {
                                 private final AllItemsViewAdapter adapter;
 
@@ -87,11 +95,13 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(intentDetails);
                                 }
                             }
+
                             ItemListener itemListener = new ItemListener(this.adapter);
                             this.listView.setOnItemClickListener(itemListener);
                         }
                     }
-                    RunnableAllItemsViewAdapterSetter runnableAllItemsViewAdapterSetter = new RunnableAllItemsViewAdapterSetter(listView, allItemsViewAdapter);
+
+                    RunnableAllItemsViewAdapterSetter runnableAllItemsViewAdapterSetter = new RunnableAllItemsViewAdapterSetter(listView, allItemsViewAdapter, this.swipeRefreshLayout);
                     runOnUiThread(runnableAllItemsViewAdapterSetter);
                 } else {
                     RunnableToast runnableToastNetErr = new RunnableToast(this.ctx, R.string.network_error, Toast.LENGTH_LONG);
@@ -100,7 +110,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        RunnableApiCall runnableApiCall = new RunnableApiCall(this, this);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.itemsListRefresh);
+        RunnableApiCall runnableApiCall = new RunnableApiCall(this, this, swipeRefreshLayout);
         new Thread(runnableApiCall).start();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(this.getClass().getSimpleName(), "Refresh initiated.");
+                new Thread(runnableApiCall).start();
+            }
+        });
     }
 }

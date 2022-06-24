@@ -57,7 +57,7 @@ public class RequestHandler {
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
-        Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
+        Log.i(this.getClass().getSimpleName(), "getAllItems connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
         Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
@@ -75,7 +75,7 @@ public class RequestHandler {
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
         this.conn.setRequestProperty("uuid", itemUuid);
-        Log.i(this.getClass().getSimpleName(), "Connection will be attempted");
+        Log.i(this.getClass().getSimpleName(), "getItemDetails connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
         Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
