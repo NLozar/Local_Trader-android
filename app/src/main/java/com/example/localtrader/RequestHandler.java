@@ -20,7 +20,6 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
 public class RequestHandler {
@@ -39,12 +38,7 @@ public class RequestHandler {
         this.sslContext = SSLContext.getInstance("TLS");
         this.sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            @Override
-            public boolean verify(String s, SSLSession sslSession) {
-                return true;
-            }
-        };
+        HostnameVerifier allHostsValid = (s, sslSession) -> true;
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
 

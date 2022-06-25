@@ -4,9 +4,9 @@ import android.content.Context;
 import android.widget.Toast;
 
 public class RunnableToast implements Runnable {
-    private Context ctx;
-    private String text;
-    private int duration;
+    private final Context ctx;
+    private final String text;
+    private final int duration;
 
     public RunnableToast(Context ctx, int resId, int duration) {
         this.ctx = ctx;

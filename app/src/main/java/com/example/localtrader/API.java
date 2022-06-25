@@ -69,7 +69,7 @@ public class API {
         }
         if (networkInfo != null && networkInfo.isConnected()) {
             try {
-                return callSpec.call();
+                return callSpec.call(); // SUCCESS
             } catch (Exception e) {
                 Log.e(this.getClass().getSimpleName(), "Request failed.");
                 e.printStackTrace();

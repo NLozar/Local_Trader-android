@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -89,10 +90,36 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Log.i(this.getClass().getSimpleName(), "Item got clicked: " + this.adapter.getUuid(i));
-                                    Intent intentDetails = new Intent(ctx, DetailsActivity.class); // Risky AF. ctx comes from outside of the class
-                                    intentDetails.putExtra("uuid", this.adapter.getUuid(i));
-                                    startActivity(intentDetails);
+                                    String uuid = this.adapter.getUuid(i);
+                                    Log.i(this.getClass().getSimpleName(), "Item got clicked: " + uuid);
+
+                                    class RunnableDetailsApiCall implements Runnable {
+                                        private final Context ctx;
+                                        private final API api;
+                                        private final String uuid;
+
+                                        public RunnableDetailsApiCall(Context ctx, API api, String uuid) {
+                                            this.ctx = ctx;
+                                            this.api = api;
+                                            this.uuid = uuid;
+                                        }
+
+                                        @Override
+                                        public void run() {
+                                            Object resObj = this.api.getItemDetails(this.uuid);
+                                            if (!resObj.getClass().equals(String.class)) {
+                                                Intent intentDetails = new Intent(this.ctx, DetailsActivity.class); // Risky AF. ctx comes from outside of the class
+                                                intentDetails.putExtra("item_data", (Parcelable) resObj);
+                                                startActivity(intentDetails);
+                                            } else {
+                                                RunnableToast requestFailureToast = new RunnableToast(this.ctx, R.string.request_failure, Toast.LENGTH_LONG);
+                                                runOnUiThread(requestFailureToast);
+                                            }
+                                        }
+                                    }
+
+                                    RunnableDetailsApiCall runnableDetailsApiCall = new RunnableDetailsApiCall(ctx, api, uuid);
+                                    new Thread(runnableDetailsApiCall).start();
                                 }
                             }
 
