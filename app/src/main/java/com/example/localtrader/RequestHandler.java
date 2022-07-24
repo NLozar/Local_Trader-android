@@ -60,7 +60,7 @@ public class RequestHandler {
     }
 
     public JsonNode getItemDetails(String itemUuid) throws IOException {
-        String url = this.apiBaseUrl + "/itemDetails";
+        String url = this.apiBaseUrl + "/itemDetails/" + itemUuid;
         this.conn = (HttpsURLConnection) new URL(url).openConnection();
         this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
         this.conn.setReadTimeout(5000);
@@ -68,7 +68,6 @@ public class RequestHandler {
         this.conn.setRequestMethod("GET");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
-        this.conn.setRequestProperty("uuid", itemUuid);
         Log.i(this.getClass().getSimpleName(), "getItemDetails connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
