@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="back"/>
+            android:text="@string/back"/>
 
         <Button
             android:id="@+id/btn_logInOut"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="log in"/>
+            android:text="@string/log_in"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

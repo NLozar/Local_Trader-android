@@ -3,4 +3,16 @@
     <string name="base_api_url">https://192.168.1.147:14443</string>
     <string name="request_failure">Request failed</string>
     <string name="network_error">Network error</string>
+    <string name="my_items">my items</string>
+    <string name="log_in">log in</string>
+    <string name="back">back</string>
+    <string name="register">register</string>
+    <string name="log_out">log out</string>
+    <string name="username_example">ex. sellerman01</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="minimum_num_characters">minimum 8 characters</string>
+    <string name="user_logged_out">User logged out</string>
+    <string name="pw_too_short_warn">Password must be at least 8 characters</string>
+    <string name="missing_username">Missing a username</string>
 </resources>

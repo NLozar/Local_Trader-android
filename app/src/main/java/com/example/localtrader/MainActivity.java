@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,10 +25,33 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button btnLogInOut;
+    private Button btnMyItems;
+
+    private void setButtons() {
+        if (AppState.userLoggedIn) {
+            this.btnMyItems.setVisibility(View.VISIBLE);
+            this.btnLogInOut.setText(R.string.log_out);
+            this.btnLogInOut.setOnClickListener(l -> {
+                AppState.logUserOut();
+                this.btnLogInOut.setText(R.string.log_in);
+                this.btnMyItems.setVisibility(View.GONE);
+                Toast.makeText(this, R.string.user_logged_out, Toast.LENGTH_LONG).show();
+            });
+        } else {
+            this.btnMyItems.setVisibility(View.GONE);
+            this.btnLogInOut.setText(R.string.log_in);
+            this.btnLogInOut.setOnClickListener(l -> startActivity(new Intent(this, LoginActivity.class)));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.btnLogInOut = findViewById(R.id.btn_logInOut);
+        this.btnMyItems = findViewById(R.id.btn_myItems);
 
         class RunnableApiCall implements Runnable {
             private final Context ctx;
@@ -108,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void run() {
                                             Object resObj = this.api.getItemDetails(this.uuid);
                                             if (!resObj.getClass().equals(String.class)) {
-                                                Intent intentDetails = new Intent(this.ctx, DetailsActivity.class); // Risky AF. ctx comes from outside of the class
+                                                Intent intentDetails = new Intent(this.ctx, DetailsActivity.class);
                                                 intentDetails.putExtra("item_data", (Parcelable) resObj);
                                                 startActivity(intentDetails);
                                             } else {
@@ -137,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        this.setButtons();
+
         SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.itemsListRefresh);
         RunnableApiCall runnableApiCall = new RunnableApiCall(this, this, swipeRefreshLayout);
         new Thread(runnableApiCall).start();
@@ -147,5 +173,11 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(runnableApiCall).start();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.setButtons();
     }
 }
