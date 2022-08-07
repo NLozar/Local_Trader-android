@@ -30,4 +30,8 @@ public class DataHandler {
                 jn.get("uuid").textValue()
         );
     }
+
+    public static JwtHolder jwtToString(JsonNode jn) {
+        return new JwtHolder(jn.get("token").textValue());
+    }
 }

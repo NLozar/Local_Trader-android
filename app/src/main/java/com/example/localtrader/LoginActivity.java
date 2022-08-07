@@ -2,11 +2,20 @@ package com.example.localtrader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -14,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private TextView tvWarning;
 
-    private void attemptLogin() {
+    private void attemptLogin() throws CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         String username = this.etUsername.getText().toString();
         if (username.length() == 0) {
             this.tvWarning.setVisibility(View.VISIBLE);
@@ -27,6 +36,16 @@ public class LoginActivity extends AppCompatActivity {
             this.tvWarning.setText(R.string.pw_too_short_warn);
             return;
         }
+        API api = new API(this, new RequestHandler(this, String.valueOf(R.string.base_api_url)));
+        new Thread(() -> {
+            Object resObj = api.attemptLogin(etUsername.getText().toString(), etPassword.getText().toString());
+            if (!resObj.getClass().equals(String.class)) {
+                AppState.logUserIn(etUsername.getText().toString(), (JwtHolder) resObj);
+                startActivity(new Intent(this, MainActivity.class));
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, R.string.request_failure, Toast.LENGTH_LONG).show());
+            }
+        }).start();
     }
 
     @Override
@@ -39,6 +58,13 @@ public class LoginActivity extends AppCompatActivity {
         Button btnRegister = findViewById(R.id.btn_register);
         this.tvWarning = findViewById(R.id.login_warning);
 
-        btnLogIn.setOnClickListener(l -> this.attemptLogin());
+        btnLogIn.setOnClickListener(l -> {
+            try {
+                Log.i(this.getClass().getSimpleName(), "Login will be attempted");
+                this.attemptLogin();
+            } catch (CertificateException | IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

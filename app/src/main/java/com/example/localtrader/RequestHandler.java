@@ -76,6 +76,25 @@ public class RequestHandler {
         return objectMapper.readTree(this.conn.getInputStream());
     }
 
+    public JsonNode attemptLogin(String username, String password) throws IOException {
+        String url = this.apiBaseUrl + "/login";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("POST");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("username", username);
+        this.conn.setRequestProperty("password", password);
+        Log.i(this.getClass().getSimpleName(), "login connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readTree(this.conn.getInputStream());
+    }
+
     private static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();

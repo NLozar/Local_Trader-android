@@ -50,6 +50,24 @@ public class API {
         }
     }
 
+    private static class LoginCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final String username;
+        private final String password;
+
+        private LoginCallable(RequestHandler requestHandler, String username, String password) {
+            this.requestHandler = requestHandler;
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return DataHandler.jwtToString(this.requestHandler.attemptLogin(this.username, this.password));
+        }
+    }
+
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
@@ -89,5 +107,9 @@ public class API {
     public Object getItemDetails(String uuid) {
         ItemDetailsCallable itemDetailsCallable = new ItemDetailsCallable(this.requestHandler, uuid);
         return this.call(itemDetailsCallable);
+    }
+
+    public Object attemptLogin(String username, String password) {
+        return this.call(new LoginCallable(this.requestHandler, username, password));
     }
 }
