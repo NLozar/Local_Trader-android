@@ -15,4 +15,8 @@
     <string name="user_logged_out">User logged out</string>
     <string name="pw_too_short_warn">Password must be at least 8 characters</string>
     <string name="missing_username">Missing a username</string>
+    <string name="pi_title">Item title</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
+    <string name="contact_info">Contact info</string>
 </resources>
