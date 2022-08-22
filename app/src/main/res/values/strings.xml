@@ -22,4 +22,9 @@
     <string name="post_item">Post item</string>
     <string name="logged_out">Logged out</string>
     <string name="bad_login_creds">Invalid login credentials</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="confirm">Confirm</string>
+    <string name="pw_mismatch">Passwords do not match</string>
+    <string name="username_taken">Username already taken</string>
+    <string name="registration_success">Registration successful</string>
 </resources>

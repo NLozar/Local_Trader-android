@@ -38,4 +38,8 @@ public class DataHandler {
             return new LoginRequestStatus(jn.get("token").textValue());
         }
     }
+
+    public static boolean isUsernameTaken(JsonNode jn) {
+        return jn.get("username taken").asBoolean();
+    }
 }

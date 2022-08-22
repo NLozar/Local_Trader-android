@@ -68,6 +68,24 @@ public class API {
         }
     }
 
+    private static class RegisterUserCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final String username;
+        private final String password;
+
+        private RegisterUserCallable(RequestHandler requestHandler, String username, String password) {
+            this.requestHandler = requestHandler;
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return this.requestHandler.registerUser(this.username, this.password);
+        }
+    }
+
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
@@ -111,5 +129,9 @@ public class API {
 
     public Object attemptLogin(String username, String password) {
         return this.call(new LoginCallable(this.requestHandler, username, password));
+    }
+
+    public Object registerUser(String username, String password) {
+        return this.call(new RegisterUserCallable(this.requestHandler, username, password));
     }
 }

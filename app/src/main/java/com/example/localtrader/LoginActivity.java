@@ -77,5 +77,13 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
+        btnRegister.setOnClickListener(l -> {
+            Intent registerIntent = new Intent(this, RegisterUserActivity.class);
+            registerIntent.putExtra("username", etUsername.getText().toString());
+            registerIntent.putExtra("password", etPassword.getText().toString());
+            startActivity(registerIntent);
+            finish();
+        });
     }
 }

@@ -6,10 +6,7 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -95,23 +92,22 @@ public class RequestHandler {
         return objectMapper.readTree(this.conn.getInputStream());
     }
 
-    private static String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
+    public JsonNode registerUser(String username, String password) throws IOException {
+        String url = this.apiBaseUrl + "/registerUser";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("POST");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("username", username);
+        this.conn.setRequestProperty("password", password);
+        Log.i(this.getClass().getSimpleName(), "registerUser connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readTree(this.conn.getInputStream());
     }
 }
