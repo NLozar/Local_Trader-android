@@ -49,9 +49,8 @@ public class LoginActivity extends AppCompatActivity {
                         this.tvWarning.setText(R.string.bad_login_creds);
                         this.tvWarning.setVisibility(View.VISIBLE);
                     });
-                } else {
+                } else {    // USER SUCCESSFULLY LOGGED IN
                     AppState.logUserIn(etUsername.getText().toString(), loginStatus.jwt);
-                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                 }
             } else {

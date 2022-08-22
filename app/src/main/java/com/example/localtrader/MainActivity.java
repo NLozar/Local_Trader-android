@@ -51,14 +51,8 @@ public class MainActivity extends AppCompatActivity {
             this.btnMyItems.setVisibility(View.GONE);
             this.btnLogInOut.setText(R.string.log_in);
             this.profileName.setText(R.string.logged_out);
-            this.btnLogInOut.setOnClickListener(l -> {
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-            });
-            this.btnPostItem.setOnClickListener(l -> {
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-            });
+            this.btnLogInOut.setOnClickListener(l -> startActivity(new Intent(this, LoginActivity.class)));
+            this.btnPostItem.setOnClickListener(l -> startActivity(new Intent(this, LoginActivity.class)));
         }
     }
 
