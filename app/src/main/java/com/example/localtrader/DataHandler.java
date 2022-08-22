@@ -31,7 +31,11 @@ public class DataHandler {
         );
     }
 
-    public static JwtHolder jwtToString(JsonNode jn) {
-        return new JwtHolder(jn.get("token").textValue());
+    public static LoginRequestStatus resToLoginReqStatus(JsonNode jn) {
+        if (jn.get("bad creds").asBoolean()) {
+            return new LoginRequestStatus(true);
+        } else {
+            return new LoginRequestStatus(jn.get("token").textValue());
+        }
     }
 }

@@ -12,9 +12,9 @@ public class AppState {
         token = null;
     }
 
-    public static void logUserIn(String uName, JwtHolder jwt) {
+    public static void logUserIn(String uName, String jwt) {
         userLoggedIn = true;
         userName = uName;
-        token = jwt.toString();
+        token = jwt;
     }
 }

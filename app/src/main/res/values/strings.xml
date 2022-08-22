@@ -19,4 +19,7 @@
     <string name="price">Price</string>
     <string name="description">Description</string>
     <string name="contact_info">Contact info</string>
+    <string name="post_item">Post item</string>
+    <string name="logged_out">Logged out</string>
+    <string name="bad_login_creds">Invalid login credentials</string>
 </resources>

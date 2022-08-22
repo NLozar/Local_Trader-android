@@ -14,7 +14,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -27,21 +30,35 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnLogInOut;
     private Button btnMyItems;
+    private FloatingActionButton btnPostItem;
+    private TextView profileName;
 
     private void setButtons() {
         if (AppState.userLoggedIn) {
             this.btnMyItems.setVisibility(View.VISIBLE);
             this.btnLogInOut.setText(R.string.log_out);
+            this.profileName.setText(AppState.userName);
             this.btnLogInOut.setOnClickListener(l -> {
                 AppState.logUserOut();
                 this.btnLogInOut.setText(R.string.log_in);
                 this.btnMyItems.setVisibility(View.GONE);
+                this.profileName.setText(R.string.logged_out);
+                this.btnLogInOut.setOnClickListener(m -> startActivity(new Intent(this, LoginActivity.class)));
                 Toast.makeText(this, R.string.user_logged_out, Toast.LENGTH_LONG).show();
             });
+            this.btnPostItem.setOnClickListener(l -> startActivity(new Intent(this, PostItemActivity.class)));
         } else {
             this.btnMyItems.setVisibility(View.GONE);
             this.btnLogInOut.setText(R.string.log_in);
-            this.btnLogInOut.setOnClickListener(l -> startActivity(new Intent(this, LoginActivity.class)));
+            this.profileName.setText(R.string.logged_out);
+            this.btnLogInOut.setOnClickListener(l -> {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            });
+            this.btnPostItem.setOnClickListener(l -> {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            });
         }
     }
 
@@ -52,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.btnLogInOut = findViewById(R.id.btn_logInOut);
         this.btnMyItems = findViewById(R.id.btn_myItems);
+        this.btnPostItem = findViewById(R.id.btn_postItem);
+        this.profileName = findViewById(R.id.profile_name);
 
         class RunnableApiCall implements Runnable {
             private final Context ctx;

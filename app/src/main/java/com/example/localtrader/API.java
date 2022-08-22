@@ -64,7 +64,7 @@ public class API {
 
         @Override
         public Object call() throws Exception {
-            return DataHandler.jwtToString(this.requestHandler.attemptLogin(this.username, this.password));
+            return this.requestHandler.attemptLogin(this.username, this.password);
         }
     }
 

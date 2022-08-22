@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -36,12 +38,22 @@ public class LoginActivity extends AppCompatActivity {
             this.tvWarning.setText(R.string.pw_too_short_warn);
             return;
         }
-        API api = new API(this, new RequestHandler(this, String.valueOf(R.string.base_api_url)));
+        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
         new Thread(() -> {
             Object resObj = api.attemptLogin(etUsername.getText().toString(), etPassword.getText().toString());
             if (!resObj.getClass().equals(String.class)) {
-                AppState.logUserIn(etUsername.getText().toString(), (JwtHolder) resObj);
-                startActivity(new Intent(this, MainActivity.class));
+                LoginRequestStatus loginStatus = DataHandler.resToLoginReqStatus((JsonNode) resObj);
+                if (loginStatus.badCreds) {
+                    Log.i(this.getClass().getSimpleName(), "Showing bad creds message");
+                    runOnUiThread(() -> {
+                        this.tvWarning.setText(R.string.bad_login_creds);
+                        this.tvWarning.setVisibility(View.VISIBLE);
+                    });
+                } else {
+                    AppState.logUserIn(etUsername.getText().toString(), loginStatus.jwt);
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                }
             } else {
                 runOnUiThread(() -> Toast.makeText(this, R.string.request_failure, Toast.LENGTH_LONG).show());
             }
