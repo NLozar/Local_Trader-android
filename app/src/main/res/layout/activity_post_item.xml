@@ -1,132 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PostItemActivity">
 
-    <TextView
-        android:id="@+id/pi_itemTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="10dp"
-        android:text="@string/pi_title"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/pi_title_warn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_is_required"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/pi_et_title"
-        app:layout_constraintStart_toEndOf="@+id/pi_itemTitle"
-        android:textColor="#ff0000"
-        android:textSize="17sp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="3dp"/>
-
-    <EditText
-        android:id="@+id/pi_et_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#43010101"
-        android:layout_marginHorizontal="10dp"
-        android:inputType="text"
-        android:maxLength="255"
-        android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@+id/pi_itemTitle" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/pi_price"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:text="@string/price"
-        android:textSize="25sp"
-        android:layout_marginHorizontal="10sp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pi_et_title" />
+        <TextView
+            android:id="@+id/pi_itemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/pi_title"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/pi_et_price"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:background="#43010101"
-        android:inputType="text"
-        android:maxLength="255"
-        android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@+id/pi_price" />
+        <TextView
+            android:id="@+id/pi_title_warn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_is_required"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pi_et_title"
+            app:layout_constraintStart_toEndOf="@+id/pi_itemTitle"
+            android:textColor="#ff0000"
+            android:textSize="17sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="3dp"/>
 
-    <TextView
-        android:id="@+id/pi_descr"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:text="@string/description"
-        android:textSize="25sp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pi_et_price" />
+        <EditText
+            android:id="@+id/pi_et_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#43010101"
+            android:layout_marginHorizontal="10dp"
+            android:inputType="text"
+            android:maxLength="255"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/pi_itemTitle" />
 
-    <EditText
-        android:id="@+id/pi_et_descr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="150dp"
-        android:layout_marginHorizontal="10dp"
-        android:background="#43010101"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/pi_descr" />
+        <TextView
+            android:id="@+id/pi_price"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/price"
+            android:textSize="25sp"
+            android:layout_marginHorizontal="10sp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pi_et_title" />
 
-    <TextView
-        android:id="@+id/pi_contactInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:text="@string/contact_info"
-        android:textSize="25sp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pi_et_descr" />
+        <EditText
+            android:id="@+id/pi_et_price"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#43010101"
+            android:inputType="text"
+            android:maxLength="255"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/pi_price" />
 
-    <TextView
-        android:id="@+id/pi_contact_warn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/contact_info_is_required"
-        android:visibility="gone"
-        android:textColor="#ff0000"
-        android:textSize="17sp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/pi_et_contactInfo"
-        app:layout_constraintStart_toEndOf="@+id/pi_contactInfo" />
+        <TextView
+            android:id="@+id/pi_descr"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/description"
+            android:textSize="25sp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pi_et_price" />
 
-    <EditText
-        android:id="@+id/pi_et_contactInfo"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:background="#43010101"
-        android:inputType="text"
-        android:maxLength="255"
-        android:maxLines="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pi_contactInfo" />
+        <EditText
+            android:id="@+id/pi_et_descr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#43010101"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@+id/pi_descr" />
 
-    <Button
-        android:id="@+id/btn_pi_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pi_et_contactInfo"
-        android:layout_marginTop="15dp"
-        android:text="@string/post"/>
+        <TextView
+            android:id="@+id/pi_contactInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/contact_info"
+            android:textSize="25sp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pi_et_descr" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/pi_contact_warn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contact_info_is_required"
+            android:visibility="gone"
+            android:textColor="#ff0000"
+            android:textSize="17sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/pi_et_contactInfo"
+            app:layout_constraintStart_toEndOf="@+id/pi_contactInfo" />
+
+        <EditText
+            android:id="@+id/pi_et_contactInfo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#43010101"
+            android:inputType="text"
+            android:maxLength="255"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pi_contactInfo" />
+
+        <Button
+            android:id="@+id/btn_pi_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pi_et_contactInfo"
+            android:layout_marginTop="15dp"
+            android:text="@string/post"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
