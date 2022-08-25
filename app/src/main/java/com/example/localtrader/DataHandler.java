@@ -42,4 +42,10 @@ public class DataHandler {
     public static boolean isUsernameTaken(JsonNode jn) {
         return jn.get("username taken").asBoolean();
     }
+
+    public static PostRequestStatus jsonNodeToPostReqStatus(JsonNode jn) {
+        PostRequestStatus prs = new PostRequestStatus(false);
+        prs.badJwt = jn.get("bad jwt").asBoolean();
+        return prs;
+    }
 }

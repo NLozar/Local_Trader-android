@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     RunnableAllItemsViewAdapterSetter runnableAllItemsViewAdapterSetter = new RunnableAllItemsViewAdapterSetter(listView, allItemsViewAdapter, this.swipeRefreshLayout);
                     runOnUiThread(runnableAllItemsViewAdapterSetter);
                 } else {
-                    RunnableToast runnableToastNetErr = new RunnableToast(this.ctx, R.string.network_error, Toast.LENGTH_LONG);
+                    RunnableToast runnableToastNetErr = new RunnableToast(this.ctx, R.string.request_failure, Toast.LENGTH_LONG);
                     runOnUiThread(runnableToastNetErr);
                 }
             }

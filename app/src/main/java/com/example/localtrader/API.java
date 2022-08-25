@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 public class API {
@@ -86,6 +87,24 @@ public class API {
         }
     }
 
+    private static class PostItemCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final String token;
+        private final HashMap<String, String> details;
+
+        public PostItemCallable(RequestHandler requestHandler, String token, HashMap<String, String> details) {
+            this.requestHandler = requestHandler;
+            this.token = token;
+            this.details = details;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return this.requestHandler.postItem(token, details);
+        }
+    }
+
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
@@ -133,5 +152,9 @@ public class API {
 
     public Object registerUser(String username, String password) {
         return this.call(new RegisterUserCallable(this.requestHandler, username, password));
+    }
+
+    public Object postItem(String token, HashMap<String, String> details) {
+        return this.call(new PostItemCallable(this.requestHandler, token, details));
     }
 }

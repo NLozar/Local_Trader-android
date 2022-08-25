@@ -13,6 +13,8 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -51,7 +53,7 @@ public class RequestHandler {
         Log.i(this.getClass().getSimpleName(), "getAllItems connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        Log.i(this.getClass().getSimpleName(), "itemsList Response code: " + responseCode);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(this.conn.getInputStream());
     }
@@ -68,7 +70,7 @@ public class RequestHandler {
         Log.i(this.getClass().getSimpleName(), "getItemDetails connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        Log.i(this.getClass().getSimpleName(), "/itemDetails/" + itemUuid + " Response code: " + responseCode);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(this.conn.getInputStream());
     }
@@ -87,7 +89,7 @@ public class RequestHandler {
         Log.i(this.getClass().getSimpleName(), "login connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        Log.i(this.getClass().getSimpleName(), "/login Response code: " + responseCode);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(this.conn.getInputStream());
     }
@@ -106,8 +108,36 @@ public class RequestHandler {
         Log.i(this.getClass().getSimpleName(), "registerUser connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        Log.i(this.getClass().getSimpleName(), "registerUser Response code: " + responseCode);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(this.conn.getInputStream());
+    }
+
+    public PostRequestStatus postItem(String token, HashMap<String, String> details) throws IOException {
+        String url = this.apiBaseUrl + "/postItem";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("POST");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("token", token);
+        for (Map.Entry<String, String> entry: details.entrySet()) {
+            if (entry.getValue().length() == 0) {
+                this.conn.setRequestProperty(entry.getKey(), null);
+            } else {
+                this.conn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
+        Log.i(this.getClass().getSimpleName(), "postItem connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        if (responseCode == 204) {
+            return new PostRequestStatus(true);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return DataHandler.jsonNodeToPostReqStatus(objectMapper.readTree(this.conn.getInputStream()));
     }
 }

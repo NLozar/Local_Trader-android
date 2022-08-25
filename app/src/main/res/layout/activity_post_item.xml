@@ -6,28 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".PostItemActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttonHolder"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btn_back_dets"
-            android:layout_width="88dp"
-            android:layout_height="49dp"
-            android:text="@string/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <TextView
         android:id="@+id/pi_itemTitle"
         android:layout_width="wrap_content"
@@ -36,7 +14,20 @@
         android:text="@string/pi_title"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonHolder" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pi_title_warn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_is_required"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/pi_et_title"
+        app:layout_constraintStart_toEndOf="@+id/pi_itemTitle"
+        android:textColor="#ff0000"
+        android:textSize="17sp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="3dp"/>
 
     <EditText
         android:id="@+id/pi_et_title"
@@ -103,6 +94,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pi_et_descr" />
 
+    <TextView
+        android:id="@+id/pi_contact_warn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_info_is_required"
+        android:visibility="gone"
+        android:textColor="#ff0000"
+        android:textSize="17sp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/pi_et_contactInfo"
+        app:layout_constraintStart_toEndOf="@+id/pi_contactInfo" />
+
     <EditText
         android:id="@+id/pi_et_contactInfo"
         android:layout_width="match_parent"
@@ -114,5 +118,15 @@
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pi_contactInfo" />
+
+    <Button
+        android:id="@+id/btn_pi_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pi_et_contactInfo"
+        android:layout_marginTop="15dp"
+        android:text="@string/post"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

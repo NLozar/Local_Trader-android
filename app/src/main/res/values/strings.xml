@@ -18,6 +18,7 @@
     <string name="pi_title">Item title</string>
     <string name="price">Price</string>
     <string name="description">Description</string>
+    <string name="seller">Seller</string>
     <string name="contact_info">Contact info</string>
     <string name="post_item">Post item</string>
     <string name="logged_out">Logged out</string>
@@ -27,4 +28,10 @@
     <string name="pw_mismatch">Passwords do not match</string>
     <string name="username_taken">Username already taken</string>
     <string name="registration_success">Registration successful</string>
+    <string name="post">Post</string>
+    <string name="listing_posted">Listing posted</string>
+    <string name="expired_credentials">Your credentials may have expired. Log in again.</string>
+    <string name="title_is_required">Title is required</string>
+    <string name="contact_info_is_required">Contact info is required</string>
+    <string name="edit">edit</string>
 </resources>
