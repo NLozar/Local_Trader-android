@@ -34,4 +34,11 @@
     <string name="title_is_required">Title is required</string>
     <string name="contact_info_is_required">Contact info is required</string>
     <string name="edit">edit</string>
+    <string name="new_user_name">New user name</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="leave_empty">Leave empty for no change</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="changes_succeeded">Changes succeeded</string>
 </resources>

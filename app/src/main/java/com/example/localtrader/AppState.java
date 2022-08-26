@@ -17,4 +17,8 @@ public class AppState {
         userName = uName;
         token = jwt;
     }
+
+    public static void changeUserName(String newName) {
+        userName = newName;
+    }
 }

@@ -45,7 +45,14 @@ public class DataHandler {
 
     public static PostRequestStatus jsonNodeToPostReqStatus(JsonNode jn) {
         PostRequestStatus prs = new PostRequestStatus(false);
-        prs.badJwt = jn.get("bad jwt").asBoolean();
+        prs.setBadJwt(jn.get("bad jwt").asBoolean());
         return prs;
+    }
+
+    public static ProfileEditRequestStatus jsonNodeToPers(JsonNode jn) {
+        ProfileEditRequestStatus pers = new ProfileEditRequestStatus(false);
+        pers.setUsernameTaken(jn.get("username taken").asBoolean());
+        pers.setWrongPassword(jn.get("wrong password").asBoolean());
+        return pers;
     }
 }

@@ -133,11 +133,39 @@ public class RequestHandler {
         Log.i(this.getClass().getSimpleName(), "postItem connection will be attempted");
         this.conn.connect();
         int responseCode = this.conn.getResponseCode(); // blocks further execution until response
-        Log.i(this.getClass().getSimpleName(), "Response code: " + responseCode);
+        Log.i(this.getClass().getSimpleName(), "postItem Response code: " + responseCode);
         if (responseCode == 204) {
             return new PostRequestStatus(true);
         }
         ObjectMapper objectMapper = new ObjectMapper();
         return DataHandler.jsonNodeToPostReqStatus(objectMapper.readTree(this.conn.getInputStream()));
+    }
+
+    public ProfileEditRequestStatus editProfile(HashMap<String, String> profileChangeDetails) throws IOException {
+        String url = this.apiBaseUrl + "/editProfile";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("POST");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("currentUsername", AppState.userName);
+        for (Map.Entry<String, String> entry: profileChangeDetails.entrySet()) {
+            if (entry.getValue().length() == 0) {
+                this.conn.setRequestProperty(entry.getKey(), null);
+            } else {
+                this.conn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
+        Log.i(this.getClass().getSimpleName(), "editProfile connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "editProfile Response code: " + responseCode);
+        if (responseCode == 204) {
+            return new ProfileEditRequestStatus(true);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return DataHandler.jsonNodeToPers(objectMapper.readTree(this.conn.getInputStream()));
     }
 }

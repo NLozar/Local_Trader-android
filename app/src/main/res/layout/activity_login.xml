@@ -29,7 +29,8 @@
         android:inputType="text"
         android:maxLength="255"
         android:maxLines="1"
-        android:autofillHints="username"/>
+        android:autofillHints="username"
+        android:imeOptions="flagForceAscii"/>
 
     <TextView
         android:id="@+id/tv_password"

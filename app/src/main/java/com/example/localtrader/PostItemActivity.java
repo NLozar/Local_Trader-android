@@ -57,10 +57,10 @@ public class PostItemActivity extends AppCompatActivity {
             if (!resObj.getClass().equals(String.class)) {
                 PostRequestStatus prs = (PostRequestStatus) resObj;
                 if (prs.badJwt) {
-                    runOnUiThread(() -> Toast.makeText(this, R.string.expired_credentials, Toast.LENGTH_LONG));
+                    runOnUiThread(() -> Toast.makeText(this, R.string.expired_credentials, Toast.LENGTH_LONG).show());
                     startActivity(new Intent(this, LoginActivity.class));
                 } else if (prs.success) {
-                    runOnUiThread(() -> Toast.makeText(this, R.string.listing_posted, Toast.LENGTH_LONG));
+                    runOnUiThread(() -> Toast.makeText(this, R.string.listing_posted, Toast.LENGTH_LONG).show());
                     finish();
                 }
             } else {

@@ -105,6 +105,22 @@ public class API {
         }
     }
 
+    private static class EditProfileCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final HashMap<String, String> profileChangeDetails;
+
+        public EditProfileCallable(RequestHandler requestHandler, HashMap<String, String> profileChangeDetails) {
+            this.requestHandler = requestHandler;
+            this.profileChangeDetails = profileChangeDetails;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return this.requestHandler.editProfile(this.profileChangeDetails);
+        }
+    }
+
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
@@ -156,5 +172,9 @@ public class API {
 
     public Object postItem(String token, HashMap<String, String> details) {
         return this.call(new PostItemCallable(this.requestHandler, token, details));
+    }
+
+    public Object editProfile(HashMap<String, String> profileChangeDetails) {
+        return this.call(new EditProfileCallable(this.requestHandler, profileChangeDetails));
     }
 }

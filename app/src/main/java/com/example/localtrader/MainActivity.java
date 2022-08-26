@@ -38,11 +38,13 @@ public class MainActivity extends AppCompatActivity {
             this.btnMyItems.setVisibility(View.VISIBLE);
             this.btnLogInOut.setText(R.string.log_out);
             this.profileName.setText(AppState.userName);
+            this.profileName.setOnClickListener(l -> startActivity(new Intent(this, EditProfileActivity.class)));
             this.btnLogInOut.setOnClickListener(l -> {
                 AppState.logUserOut();
                 this.btnLogInOut.setText(R.string.log_in);
                 this.btnMyItems.setVisibility(View.GONE);
                 this.profileName.setText(R.string.logged_out);
+                this.profileName.setOnClickListener(null);
                 this.btnLogInOut.setOnClickListener(m -> startActivity(new Intent(this, LoginActivity.class)));
                 Toast.makeText(this, R.string.user_logged_out, Toast.LENGTH_LONG).show();
             });

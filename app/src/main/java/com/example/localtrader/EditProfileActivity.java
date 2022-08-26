@@ -1,0 +1,115 @@
+package com.example.localtrader;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.HashMap;
+
+public class EditProfileActivity extends AppCompatActivity {
+
+    private EditText etNewUsername;
+    private TextView tvNewUsernameWarn;
+    private EditText etCurrPassword;
+    private TextView tvCurrentPwWarn;
+    private EditText etNewPassword;
+    private TextView tvNewPwWarn;
+    private EditText etConfirmNewPw;
+    private TextView tvPwMismatch;
+
+    private boolean setWarnings(String currPw, String newPw, String confirmNewPw) {
+        boolean tripped = false;
+        if (currPw.length() < 8) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.pw_too_short_warn);
+            tripped = true;
+        } else {
+            this.tvCurrentPwWarn.setVisibility(View.GONE);
+        }
+        if ((newPw.length() < 8) && (newPw.length() != 0)) {
+            this.tvNewPwWarn.setVisibility(View.VISIBLE);
+            this.tvNewPwWarn.setText(R.string.pw_too_short_warn);
+            tripped = true;
+        } else {
+            this.tvCurrentPwWarn.setVisibility(View.GONE);
+        }
+        if (!newPw.equals(confirmNewPw) && (newPw.length() != 0)) {
+            this.tvPwMismatch.setVisibility(View.VISIBLE);
+            tripped = true;
+        } else {
+            this.tvPwMismatch.setVisibility(View.GONE);
+        }
+        return tripped;
+    }
+
+    private void confirmClick() {
+        this.tvNewUsernameWarn.setVisibility(View.GONE);
+        String currentPw = this.etCurrPassword.getText().toString();
+        String newPw = this.etNewPassword.getText().toString();
+        String confirmNewPw = this.etConfirmNewPw.getText().toString();
+        if (this.setWarnings(currentPw, newPw, confirmNewPw)) return;
+        String newUsername = this.etNewUsername.getText().toString();
+        HashMap<String, String> profileChangeDetails = new HashMap<>();
+        profileChangeDetails.put("newUsername", newUsername);
+        profileChangeDetails.put("currentPw", currentPw);
+        profileChangeDetails.put("newPw", newPw);
+        new Thread(() -> {
+            try {
+                API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+                Object resObj = api.editProfile(profileChangeDetails);
+                if (!resObj.getClass().equals(String.class)) {
+                    ProfileEditRequestStatus pers = (ProfileEditRequestStatus) resObj;
+                    if (pers.success) {
+                        runOnUiThread(() -> Toast.makeText(this, R.string.changes_succeeded, Toast.LENGTH_LONG).show());
+                        AppState.changeUserName(newUsername);
+                        finish();
+                    } else if (pers.wrongPassword) {
+                        runOnUiThread(() -> {
+                            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+                            this.tvCurrentPwWarn.setText(R.string.wrong_password);
+                        });
+                    } else if (pers.usernameTaken) {
+                        runOnUiThread(() -> {
+                            this.tvNewUsernameWarn.setVisibility(View.VISIBLE);
+                            this.tvNewUsernameWarn.setText(R.string.username_taken);
+                        });
+                    }
+                } else {
+                    runOnUiThread(() -> Toast.makeText(this, R.string.request_failure, Toast.LENGTH_LONG).show());
+                }
+            } catch (IOException | CertificateException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_profile);
+
+        TextView tvCurrentName = findViewById(R.id.ep_tv_current_name);
+        this.etNewUsername = findViewById(R.id.ep_et_new_username);
+        this.tvNewUsernameWarn = findViewById(R.id.ep_tv_newUsername_warn);
+        this.etCurrPassword = findViewById(R.id.ep_et_current_password);
+        this.tvCurrentPwWarn = findViewById(R.id.ep_tv_current_password_warn);
+        this.etNewPassword = findViewById(R.id.ep_et_new_password);
+        this.tvNewPwWarn = findViewById(R.id.ep_tv_new_password_warn);
+        this.etConfirmNewPw = findViewById(R.id.ep_et_confirm_new_password);
+        this.tvPwMismatch = findViewById(R.id.ep_tv_pw_mismatch);
+        Button btnConfirm = findViewById(R.id.ep_btn_confirm);
+
+        tvCurrentName.setText(AppState.userName);
+        btnConfirm.setOnClickListener(l -> this.confirmClick());
+    }
+}
