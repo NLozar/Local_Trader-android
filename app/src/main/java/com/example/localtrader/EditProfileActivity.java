@@ -29,7 +29,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private boolean setWarnings(String currPw, String newPw, String confirmNewPw) {
         boolean tripped = false;
-        if (currPw.length() < 8) {
+        if (currPw.length() == 0) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.current_pw_is_required);
+            tripped = true;
+        } else if (currPw.length() < 8) {
             this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
             this.tvCurrentPwWarn.setText(R.string.pw_too_short_warn);
             tripped = true;
@@ -41,7 +45,7 @@ public class EditProfileActivity extends AppCompatActivity {
             this.tvNewPwWarn.setText(R.string.pw_too_short_warn);
             tripped = true;
         } else {
-            this.tvCurrentPwWarn.setVisibility(View.GONE);
+            this.tvNewPwWarn.setVisibility(View.GONE);
         }
         if (!newPw.equals(confirmNewPw) && (newPw.length() != 0)) {
             this.tvPwMismatch.setVisibility(View.VISIBLE);
