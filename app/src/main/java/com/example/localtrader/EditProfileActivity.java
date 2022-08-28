@@ -97,6 +97,42 @@ public class EditProfileActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void deleteUser() {
+        String curPassword = this.etCurrPassword.getText().toString();
+        if (curPassword.length() == 0) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.current_pw_is_required);
+            return;
+        } else if (curPassword.length() < 8) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.pw_too_short_warn);
+            return;
+        }
+        new Thread(() -> {
+            try {
+                API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+                Object resObj = api.deleteUser(curPassword);
+                if (!resObj.getClass().equals(String.class)) {
+                    ProfileEditRequestStatus pers = (ProfileEditRequestStatus) resObj;
+                    if (pers.wrongPassword) {
+                        runOnUiThread(() -> {
+                            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+                            this.tvCurrentPwWarn.setText(R.string.wrong_password);
+                        });
+                    } else if (pers.success) {
+                        AppState.logUserOut();
+                        runOnUiThread(() -> Toast.makeText(this, R.string.account_deleted, Toast.LENGTH_LONG));
+                        finish();
+                    }
+                } else {
+                    runOnUiThread(() -> Toast.makeText(this, R.string.request_failure, Toast.LENGTH_LONG).show());
+                }
+            } catch (IOException | CertificateException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +148,10 @@ public class EditProfileActivity extends AppCompatActivity {
         this.etConfirmNewPw = findViewById(R.id.ep_et_confirm_new_password);
         this.tvPwMismatch = findViewById(R.id.ep_tv_pw_mismatch);
         Button btnConfirm = findViewById(R.id.ep_btn_confirm);
+        Button btnDelete = findViewById(R.id.ep_btn_delete);
 
         tvCurrentName.setText(AppState.userName);
         btnConfirm.setOnClickListener(l -> this.confirmClick());
+        btnDelete.setOnClickListener(l -> this.deleteUser());
     }
 }

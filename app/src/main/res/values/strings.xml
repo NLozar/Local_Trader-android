@@ -43,4 +43,6 @@
     <string name="changes_succeeded">Changes succeeded</string>
     <string name="current_pw_is_required">Current password is required</string>
     <string name="delete_listing">Delete listing</string>
+    <string name="delete_account">Delete account</string>
+    <string name="account_deleted">Account deleted</string>
 </resources>

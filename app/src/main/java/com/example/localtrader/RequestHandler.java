@@ -224,4 +224,25 @@ public class RequestHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         return DataHandler.jsonNodeToPostReqStatus(objectMapper.readTree(this.conn.getInputStream()));
     }
+
+    public ProfileEditRequestStatus deleteUser(String password) throws IOException {
+        String url = this.apiBaseUrl + "/deleteUser";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("DELETE");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("username", AppState.userName);
+        this.conn.setRequestProperty("password", password);
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "deleteUser Response code: " + responseCode);
+        if (responseCode == 204) {
+            return new ProfileEditRequestStatus(true);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return DataHandler.jsonNodeToPers(objectMapper.readTree(this.conn.getInputStream()));
+    }
 }

@@ -151,6 +151,22 @@ public class API {
         }
     }
 
+    private static class DeleteUserCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final String password;
+
+        public DeleteUserCallable(RequestHandler requestHandler, String password) {
+            this.requestHandler = requestHandler;
+            this.password = password;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return requestHandler.deleteUser(this.password);
+        }
+    }
+
     public API(Activity callerActivity, RequestHandler requestHandler) {
         this.callerActivity = callerActivity;
         this.requestHandler = requestHandler;
@@ -214,5 +230,9 @@ public class API {
 
     public Object deleteItem(String uuid) {
         return this.call(new DeleteItemCallable(this.requestHandler, uuid));
+    }
+
+    public Object deleteUser(String password) {
+        return this.call(new DeleteUserCallable(this.requestHandler, password));
     }
 }
