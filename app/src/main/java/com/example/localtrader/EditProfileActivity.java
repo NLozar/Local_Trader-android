@@ -1,5 +1,6 @@
 package com.example.localtrader;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText etConfirmNewPw;
     private TextView tvPwMismatch;
 
-    private boolean setWarnings(String currPw, String newPw, String confirmNewPw) {
+    private boolean setEditWarnings(String currPw, String newPw, String confirmNewPw) {
         boolean tripped = false;
         if (currPw.length() == 0) {
             this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
@@ -56,12 +57,26 @@ public class EditProfileActivity extends AppCompatActivity {
         return tripped;
     }
 
+    private boolean setDeleteWarning(String curPw) {
+        boolean tripped = false;
+        if (curPw.length() == 0) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.current_pw_is_required);
+            tripped = true;
+        } else if (curPw.length() < 8) {
+            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
+            this.tvCurrentPwWarn.setText(R.string.pw_too_short_warn);
+            tripped = true;
+        }
+        return tripped;
+    }
+
     private void confirmClick() {
         this.tvNewUsernameWarn.setVisibility(View.GONE);
         String currentPw = this.etCurrPassword.getText().toString();
         String newPw = this.etNewPassword.getText().toString();
         String confirmNewPw = this.etConfirmNewPw.getText().toString();
-        if (this.setWarnings(currentPw, newPw, confirmNewPw)) return;
+        if (this.setEditWarnings(currentPw, newPw, confirmNewPw)) return;
         String newUsername = this.etNewUsername.getText().toString();
         HashMap<String, String> profileChangeDetails = new HashMap<>();
         profileChangeDetails.put("newUsername", newUsername);
@@ -99,15 +114,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void deleteUser() {
         String curPassword = this.etCurrPassword.getText().toString();
-        if (curPassword.length() == 0) {
-            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
-            this.tvCurrentPwWarn.setText(R.string.current_pw_is_required);
-            return;
-        } else if (curPassword.length() < 8) {
-            this.tvCurrentPwWarn.setVisibility(View.VISIBLE);
-            this.tvCurrentPwWarn.setText(R.string.pw_too_short_warn);
-            return;
-        }
         new Thread(() -> {
             try {
                 API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
@@ -149,9 +155,18 @@ public class EditProfileActivity extends AppCompatActivity {
         this.tvPwMismatch = findViewById(R.id.ep_tv_pw_mismatch);
         Button btnConfirm = findViewById(R.id.ep_btn_confirm);
         Button btnDelete = findViewById(R.id.ep_btn_delete);
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
 
         tvCurrentName.setText(AppState.userName);
         btnConfirm.setOnClickListener(l -> this.confirmClick());
-        btnDelete.setOnClickListener(l -> this.deleteUser());
+        btnDelete.setOnClickListener(l -> {
+            if (this.setDeleteWarning(this.etCurrPassword.getText().toString())) return;
+            adb.setTitle(R.string.warning)
+                    .setMessage(R.string.account_delete_warn)
+                    .setCancelable(true)
+                    .setPositiveButton("OK", (m, n) -> this.deleteUser())
+                    .setNegativeButton("Cancel", (m, n) -> m.cancel())
+                    .show();
+        });
     }
 }

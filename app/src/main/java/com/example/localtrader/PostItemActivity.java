@@ -1,5 +1,6 @@
 package com.example.localtrader;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -119,6 +120,7 @@ public class PostItemActivity extends AppCompatActivity {
         this.etDescr = findViewById(R.id.pi_et_descr);
         this.etContactInfo = findViewById(R.id.pi_et_contactInfo);
         this.tvContactWarn = findViewById(R.id.pi_contact_warn);
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
 
         if (this.itemData != null) {
             this.etTitle.setText(this.itemData.getTitle());
@@ -127,13 +129,17 @@ public class PostItemActivity extends AppCompatActivity {
             this.etContactInfo.setText(this.itemData.getContact());
             Button btnDeleteItem = findViewById(R.id.btn_delete_item);
             btnDeleteItem.setVisibility(View.VISIBLE);
-            btnDeleteItem.setOnClickListener(l -> {
-                try {
-                    this.deleteItem();
-                } catch (CertificateException | IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-                    e.printStackTrace();
-                }
-            });
+            btnDeleteItem.setOnClickListener(l -> adb.setTitle(R.string.warning)
+                    .setMessage(R.string.delete_listing_warn)
+                    .setPositiveButton("YES", (m, n) -> {
+                        try {
+                            this.deleteItem();
+                        } catch (CertificateException | IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                            e.printStackTrace();
+                        }
+                    })
+                    .setNegativeButton("Cancel", (m, n) -> m.cancel())
+                    .show());
         }
         findViewById(R.id.btn_pi_post).setOnClickListener(l -> {
             try {
