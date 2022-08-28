@@ -42,4 +42,5 @@
     <string name="wrong_password">Wrong password</string>
     <string name="changes_succeeded">Changes succeeded</string>
     <string name="current_pw_is_required">Current password is required</string>
+    <string name="delete_listing">Delete listing</string>
 </resources>

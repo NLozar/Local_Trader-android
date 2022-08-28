@@ -90,18 +90,16 @@ public class API {
     private static class PostItemCallable implements Callable<Object> {
 
         private final RequestHandler requestHandler;
-        private final String token;
         private final HashMap<String, String> details;
 
-        public PostItemCallable(RequestHandler requestHandler, String token, HashMap<String, String> details) {
+        public PostItemCallable(RequestHandler requestHandler, HashMap<String, String> details) {
             this.requestHandler = requestHandler;
-            this.token = token;
             this.details = details;
         }
 
         @Override
         public Object call() throws Exception {
-            return this.requestHandler.postItem(token, details);
+            return this.requestHandler.postItem(details);
         }
     }
 
@@ -118,6 +116,38 @@ public class API {
         @Override
         public Object call() throws Exception {
             return this.requestHandler.editProfile(this.profileChangeDetails);
+        }
+    }
+
+    private static class EditItemCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final ItemDetailsDataHolder data;
+
+        public EditItemCallable(RequestHandler requestHandler, ItemDetailsDataHolder data) {
+            this.requestHandler = requestHandler;
+            this.data = data;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return this.requestHandler.editItem(this.data);
+        }
+    }
+
+    private static class DeleteItemCallable implements Callable<Object> {
+
+        private final RequestHandler requestHandler;
+        private final String uuid;
+
+        public DeleteItemCallable(RequestHandler requestHandler, String uuid) {
+            this.requestHandler = requestHandler;
+            this.uuid = uuid;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return this.requestHandler.deleteItem(this.uuid);
         }
     }
 
@@ -170,11 +200,19 @@ public class API {
         return this.call(new RegisterUserCallable(this.requestHandler, username, password));
     }
 
-    public Object postItem(String token, HashMap<String, String> details) {
-        return this.call(new PostItemCallable(this.requestHandler, token, details));
+    public Object postItem(HashMap<String, String> details) {
+        return this.call(new PostItemCallable(this.requestHandler, details));
     }
 
     public Object editProfile(HashMap<String, String> profileChangeDetails) {
         return this.call(new EditProfileCallable(this.requestHandler, profileChangeDetails));
+    }
+
+    public Object editItem(ItemDetailsDataHolder data) {
+        return this.call(new EditItemCallable(this.requestHandler, data));
+    }
+
+    public Object deleteItem(String uuid) {
+        return this.call(new DeleteItemCallable(this.requestHandler, uuid));
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class PostItemActivity extends AppCompatActivity {
     private EditText etDescr;
     private EditText etContactInfo;
     private TextView tvContactWarn;
+    private ItemDetailsDataHolder itemData;
 
     private boolean setWarnings(String title, String contactInfo) {
         boolean tripped = false;
@@ -43,17 +45,49 @@ public class PostItemActivity extends AppCompatActivity {
     }
 
     private void postItem() throws CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        String title = etTitle.getText().toString();
-        String contactInfo = etContactInfo.getText().toString();
+        String title = this.etTitle.getText().toString();
+        String contactInfo = this.etContactInfo.getText().toString();
+        String price = this.etPrice.getText().toString();
+        String descr = this.etDescr.getText().toString();
         if (this.setWarnings(title, contactInfo)) return;
         HashMap<String, String> details = new HashMap<>();
         details.put("title", title);
-        details.put("price", etPrice.getText().toString());
-        details.put("descr", etDescr.getText().toString());
+        details.put("price", price);
+        details.put("descr", descr);
         details.put("contact_info", contactInfo);
+        if (this.itemData != null) {
+            this.itemData.setTitle(title);
+            this.itemData.setPrice(price);
+            this.itemData.setDescr(descr);
+            this.itemData.setContact(contactInfo);
+        }
         API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
         new Thread(() -> {
-            Object resObj = api.postItem(AppState.token, details);
+            Object resObj;
+            if (this.itemData != null) {
+                resObj = api.editItem(this.itemData);
+            } else {
+                resObj = api.postItem(details);
+            }
+            if (!resObj.getClass().equals(String.class)) {
+                PostRequestStatus prs = (PostRequestStatus) resObj;
+                if (prs.badJwt) {
+                    runOnUiThread(() -> Toast.makeText(this, R.string.expired_credentials, Toast.LENGTH_LONG).show());
+                    startActivity(new Intent(this, LoginActivity.class));
+                } else if (prs.success) {
+                    runOnUiThread(() -> Toast.makeText(this, R.string.listing_posted, Toast.LENGTH_LONG).show());
+                    finish();
+                }
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, R.string.request_failure, Toast.LENGTH_LONG).show());
+            }
+        }).start();
+    }
+
+    private void deleteItem() throws CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+        new Thread(() -> {
+            Object resObj = api.deleteItem(this.itemData.getUuid());
             if (!resObj.getClass().equals(String.class)) {
                 PostRequestStatus prs = (PostRequestStatus) resObj;
                 if (prs.badJwt) {
@@ -74,12 +108,33 @@ public class PostItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_item);
 
+        Bundle receivedIntentExtras = getIntent().getExtras();
+        this.itemData = null;
+        if (receivedIntentExtras != null) {
+            this.itemData = (ItemDetailsDataHolder) receivedIntentExtras.get("item_data");
+        }
         this.etTitle = findViewById(R.id.pi_et_title);
         this.tvTitleWarn = findViewById(R.id.pi_title_warn);
         this.etPrice = findViewById(R.id.pi_et_price);
         this.etDescr = findViewById(R.id.pi_et_descr);
         this.etContactInfo = findViewById(R.id.pi_et_contactInfo);
         this.tvContactWarn = findViewById(R.id.pi_contact_warn);
+
+        if (this.itemData != null) {
+            this.etTitle.setText(this.itemData.getTitle());
+            this.etPrice.setText(this.itemData.getPrice());
+            this.etDescr.setText(this.itemData.getDescr());
+            this.etContactInfo.setText(this.itemData.getContact());
+            Button btnDeleteItem = findViewById(R.id.btn_delete_item);
+            btnDeleteItem.setVisibility(View.VISIBLE);
+            btnDeleteItem.setOnClickListener(l -> {
+                try {
+                    this.deleteItem();
+                } catch (CertificateException | IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
         findViewById(R.id.btn_pi_post).setOnClickListener(l -> {
             try {
                 this.postItem();

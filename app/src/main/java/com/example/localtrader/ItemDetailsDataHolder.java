@@ -7,7 +7,8 @@ import androidx.annotation.NonNull;
 
 public class ItemDetailsDataHolder implements Parcelable {
 
-    private final String title, seller_name, price, descr, contact, uuid;
+    private String title, price, descr, contact;
+    private final String seller_name, uuid;
 
     public ItemDetailsDataHolder(String title, String seller_name, String price, String descr, String contact, String uuid) {
         this.title = title;
@@ -61,6 +62,22 @@ public class ItemDetailsDataHolder implements Parcelable {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public void setDescr(String descr) {
+        this.descr = descr;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     @NonNull

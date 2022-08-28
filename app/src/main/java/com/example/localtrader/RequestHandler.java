@@ -113,7 +113,7 @@ public class RequestHandler {
         return objectMapper.readTree(this.conn.getInputStream());
     }
 
-    public PostRequestStatus postItem(String token, HashMap<String, String> details) throws IOException {
+    public PostRequestStatus postItem(HashMap<String, String> details) throws IOException {
         String url = this.apiBaseUrl + "/postItem";
         this.conn = (HttpsURLConnection) new URL(url).openConnection();
         this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
@@ -122,7 +122,7 @@ public class RequestHandler {
         this.conn.setRequestMethod("POST");
         this.conn.setDoInput(true);
         this.conn.setRequestProperty("Accept", "application/json");
-        this.conn.setRequestProperty("token", token);
+        this.conn.setRequestProperty("token", AppState.token);
         for (Map.Entry<String, String> entry: details.entrySet()) {
             if (entry.getValue().length() == 0) {
                 this.conn.setRequestProperty(entry.getKey(), null);
@@ -167,5 +167,61 @@ public class RequestHandler {
         }
         ObjectMapper objectMapper = new ObjectMapper();
         return DataHandler.jsonNodeToPers(objectMapper.readTree(this.conn.getInputStream()));
+    }
+
+    public PostRequestStatus editItem(ItemDetailsDataHolder itemData) throws IOException {
+        String url = this.apiBaseUrl + "/editItem";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("POST");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("token", AppState.token);
+        this.conn.setRequestProperty("item_uuid", itemData.getUuid());
+        this.conn.setRequestProperty("title", itemData.getTitle());
+        this.conn.setRequestProperty("contact_info", itemData.getContact());
+        if (itemData.getDescr().length() == 0) {
+            this.conn.setRequestProperty("descr", null);
+        } else {
+            this.conn.setRequestProperty("descr", itemData.getDescr());
+        }
+        if (itemData.getPrice().length() == 0) {
+            this.conn.setRequestProperty("price", null);
+        } else {
+            this.conn.setRequestProperty("price", itemData.getPrice());
+        }
+        Log.i(this.getClass().getSimpleName(), "editItem connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "editItem Response code: " + responseCode);
+        if (responseCode == 204) {
+            return new PostRequestStatus(true);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return DataHandler.jsonNodeToPostReqStatus(objectMapper.readTree(this.conn.getInputStream()));
+    }
+
+    public PostRequestStatus deleteItem(String uuid) throws IOException {
+        String url = this.apiBaseUrl + "/deleteItem";
+        this.conn = (HttpsURLConnection) new URL(url).openConnection();
+        this.conn.setSSLSocketFactory(this.sslContext.getSocketFactory());
+        this.conn.setReadTimeout(5000);
+        this.conn.setConnectTimeout(10000);
+        this.conn.setRequestMethod("DELETE");
+        this.conn.setDoInput(true);
+        this.conn.setRequestProperty("Accept", "application/json");
+        this.conn.setRequestProperty("token", AppState.token);
+        this.conn.setRequestProperty("uuid", uuid);
+        Log.i(this.getClass().getSimpleName(), "deleteItem connection will be attempted");
+        this.conn.connect();
+        int responseCode = this.conn.getResponseCode(); // blocks further execution until response
+        Log.i(this.getClass().getSimpleName(), "deleteItem Response code: " + responseCode);
+        if (responseCode == 204) {
+            return new PostRequestStatus(true);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return DataHandler.jsonNodeToPostReqStatus(objectMapper.readTree(this.conn.getInputStream()));
     }
 }
