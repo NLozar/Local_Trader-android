@@ -95,7 +95,7 @@ public class PostItemActivity extends AppCompatActivity {
                     runOnUiThread(() -> Toast.makeText(this, R.string.expired_credentials, Toast.LENGTH_LONG).show());
                     startActivity(new Intent(this, LoginActivity.class));
                 } else if (prs.success) {
-                    runOnUiThread(() -> Toast.makeText(this, R.string.listing_posted, Toast.LENGTH_LONG).show());
+                    runOnUiThread(() -> Toast.makeText(this, R.string.listing_deleted, Toast.LENGTH_LONG).show());
                     finish();
                 }
             } else {
