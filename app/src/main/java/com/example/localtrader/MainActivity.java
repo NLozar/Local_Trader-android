@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         this.btnMyItems = findViewById(R.id.btn_myItems);
         this.btnPostItem = findViewById(R.id.btn_postItem);
         this.profileName = findViewById(R.id.profile_name);
+        FloatingActionButton btnSettings = findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener(l -> startActivity(new Intent(this, SettingsActivity.class)));
 
         class RunnableApiCall implements Runnable {
             private final Context ctx;
