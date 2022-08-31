@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 this.profileName.setText(R.string.logged_out);
                 this.profileName.setOnClickListener(null);
                 this.btnLogInOut.setOnClickListener(m -> startActivity(new Intent(this, LoginActivity.class)));
+                this.btnPostItem.setOnClickListener(m -> startActivity(new Intent(this, LoginActivity.class)));
                 Toast.makeText(this, R.string.user_logged_out, Toast.LENGTH_LONG).show();
             });
             this.btnPostItem.setOnClickListener(l -> startActivity(new Intent(this, PostItemActivity.class)));
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 this.callerActivity = callerActivity;
                 this.swipeRefreshLayout = swipeRefreshLayout;
                 try {
-                    RequestHandler requestHandler = new RequestHandler(this.ctx, this.ctx.getResources().getString(R.string.base_api_url));
+                    RequestHandler requestHandler = new RequestHandler(this.ctx);
                     this.api = new API(this.callerActivity, requestHandler);
                 } catch (IOException | KeyManagementException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
                     Log.e(this.ctx.getClass().getSimpleName(), "RequestHandler or API creation creation crapped the bed");

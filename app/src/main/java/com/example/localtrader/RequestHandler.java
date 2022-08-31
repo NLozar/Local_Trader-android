@@ -27,8 +27,8 @@ public class RequestHandler {
     private HttpsURLConnection conn;
     private final SSLContext sslContext;
 
-    public RequestHandler(Context ctx, String apiBaseUrl) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        this.apiBaseUrl = apiBaseUrl;
+    public RequestHandler(Context ctx) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        this.apiBaseUrl = AppState.baseApiUrl;
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         char[] kspw = "tnuvhl".toCharArray();
         ks.load(ctx.getResources().openRawResource(R.raw.keystore), kspw);

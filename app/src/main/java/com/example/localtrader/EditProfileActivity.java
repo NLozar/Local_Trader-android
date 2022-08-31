@@ -84,7 +84,7 @@ public class EditProfileActivity extends AppCompatActivity {
         profileChangeDetails.put("newPw", newPw);
         new Thread(() -> {
             try {
-                API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+                API api = new API(this, new RequestHandler(this));
                 Object resObj = api.editProfile(profileChangeDetails);
                 if (!resObj.getClass().equals(String.class)) {
                     ProfileEditRequestStatus pers = (ProfileEditRequestStatus) resObj;
@@ -116,7 +116,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String curPassword = this.etCurrPassword.getText().toString();
         new Thread(() -> {
             try {
-                API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+                API api = new API(this, new RequestHandler(this));
                 Object resObj = api.deleteUser(curPassword);
                 if (!resObj.getClass().equals(String.class)) {
                     ProfileEditRequestStatus pers = (ProfileEditRequestStatus) resObj;

@@ -62,7 +62,7 @@ public class PostItemActivity extends AppCompatActivity {
             this.itemData.setDescr(descr);
             this.itemData.setContact(contactInfo);
         }
-        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+        API api = new API(this, new RequestHandler(this));
         new Thread(() -> {
             Object resObj;
             if (this.itemData != null) {
@@ -86,7 +86,7 @@ public class PostItemActivity extends AppCompatActivity {
     }
 
     private void deleteItem() throws CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+        API api = new API(this, new RequestHandler(this));
         new Thread(() -> {
             Object resObj = api.deleteItem(this.itemData.getUuid());
             if (!resObj.getClass().equals(String.class)) {

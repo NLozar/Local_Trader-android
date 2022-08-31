@@ -46,7 +46,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             this.tvWarning2.setText(R.string.pw_mismatch);
             return;
         }
-        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+        API api = new API(this, new RequestHandler(this));
         new Thread(() -> {
             Object resObj = api.registerUser(username, password);
             if (!resObj.getClass().equals(String.class)) {

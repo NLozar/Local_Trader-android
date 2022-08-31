@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             this.tvWarning.setText(R.string.pw_too_short_warn);
             return;
         }
-        API api = new API(this, new RequestHandler(this, getResources().getString(R.string.base_api_url)));
+        API api = new API(this, new RequestHandler(this));
         new Thread(() -> {
             Object resObj = api.attemptLogin(etUsername.getText().toString(), etPassword.getText().toString());
             if (!resObj.getClass().equals(String.class)) {
