@@ -29,20 +29,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnLogInOut;
-    private Button btnMyItems;
     private FloatingActionButton btnPostItem;
     private TextView profileName;
 
     private void setButtons() {
         if (AppState.userLoggedIn) {
-            this.btnMyItems.setVisibility(View.VISIBLE);
             this.btnLogInOut.setText(R.string.log_out);
             this.profileName.setText(AppState.userName);
             this.profileName.setOnClickListener(l -> startActivity(new Intent(this, EditProfileActivity.class)));
             this.btnLogInOut.setOnClickListener(l -> {
                 AppState.logUserOut();
                 this.btnLogInOut.setText(R.string.log_in);
-                this.btnMyItems.setVisibility(View.GONE);
                 this.profileName.setText(R.string.logged_out);
                 this.profileName.setOnClickListener(null);
                 this.btnLogInOut.setOnClickListener(m -> startActivity(new Intent(this, LoginActivity.class)));
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             });
             this.btnPostItem.setOnClickListener(l -> startActivity(new Intent(this, PostItemActivity.class)));
         } else {
-            this.btnMyItems.setVisibility(View.GONE);
             this.btnLogInOut.setText(R.string.log_in);
             this.profileName.setText(R.string.logged_out);
             this.profileName.setOnClickListener(null);
@@ -66,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.btnLogInOut = findViewById(R.id.btn_logInOut);
-        this.btnMyItems = findViewById(R.id.btn_myItems);
         this.btnPostItem = findViewById(R.id.btn_postItem);
         this.profileName = findViewById(R.id.profile_name);
         FloatingActionButton btnSettings = findViewById(R.id.btn_settings);
