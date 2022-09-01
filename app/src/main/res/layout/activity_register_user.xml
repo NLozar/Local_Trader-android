@@ -27,7 +27,7 @@
         android:background="#43010101"
         android:hint="@string/username_example"
         android:inputType="text"
-        android:maxLength="255"
+        android:maxLength="64"
         android:maxLines="1"
         android:autofillHints="username"
         android:imeOptions="flagForceAscii"/>
@@ -114,7 +114,6 @@
         android:text="@string/confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_confirm_pw"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/register_warning_2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

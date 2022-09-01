@@ -27,7 +27,7 @@
         android:background="#43010101"
         android:hint="@string/username_example"
         android:inputType="text"
-        android:maxLength="255"
+        android:maxLength="64"
         android:maxLines="1"
         android:autofillHints="username"
         android:imeOptions="flagForceAscii"/>

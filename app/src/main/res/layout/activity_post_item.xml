@@ -25,25 +25,24 @@
             android:id="@+id/pi_title_warn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:text="@string/title_is_required"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/pi_et_title"
-            app:layout_constraintStart_toEndOf="@+id/pi_itemTitle"
             android:textColor="#ff0000"
             android:textSize="17sp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="3dp"/>
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/pi_itemTitle"
+            app:layout_constraintStart_toStartOf="@+id/pi_itemTitle" />
 
         <EditText
             android:id="@+id/pi_et_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#43010101"
             android:layout_marginHorizontal="10dp"
+            android:background="#43010101"
             android:inputType="text"
             android:maxLength="255"
             android:maxLines="1"
-            app:layout_constraintTop_toBottomOf="@+id/pi_itemTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/pi_title_warn" />
 
         <TextView
             android:id="@+id/pi_price"
@@ -103,14 +102,14 @@
             android:id="@+id/pi_contact_warn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:text="@string/contact_info_is_required"
-            android:visibility="gone"
             android:textColor="#ff0000"
             android:textSize="17sp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="3dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/pi_et_contactInfo"
-            app:layout_constraintStart_toEndOf="@+id/pi_contactInfo" />
+            app:layout_constraintStart_toStartOf="@+id/pi_contactInfo"
+            app:layout_constraintTop_toBottomOf="@+id/pi_contactInfo" />
 
         <EditText
             android:id="@+id/pi_et_contactInfo"
@@ -122,7 +121,7 @@
             android:maxLength="255"
             android:maxLines="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pi_contactInfo" />
+            app:layout_constraintTop_toBottomOf="@+id/pi_contact_warn" />
 
         <Button
             android:id="@+id/btn_pi_post"
