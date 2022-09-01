@@ -19,13 +19,19 @@ public class DetailsActivity extends AppCompatActivity {
     private void setDisplayedData(ItemDetailsDataHolder data) {
         this.tvTitle.setText(data.getTitle());
         if (data.getPrice() != null) {
-            this.tvPrice.setText(String.format("%s: %s", getResources().getString(R.string.price), data.getPrice()));
+            this.tvPrice.setVisibility(View.VISIBLE);
+            this.tvPrice.setText(String.format("%s:\n%s", getResources().getString(R.string.price), data.getPrice()));
+        } else {
+            this.tvPrice.setVisibility(View.GONE);
         }
         if (data.getDescr() != null) {
-            this.tvDescr.setText(String.format("%s: %s", getResources().getString(R.string.description), data.getDescr()));
+            this.tvDescr.setVisibility(View.VISIBLE);
+            this.tvDescr.setText(String.format("%s:\n%s", getResources().getString(R.string.description), data.getDescr()));
+        } else {
+            this.tvDescr.setVisibility(View.GONE);
         }
-        this.tvSeller.setText(String.format("%s: %s", getResources().getString(R.string.seller), data.getSeller_name()));
-        this.tvContact.setText(String.format("%s: %s", getResources().getString(R.string.contact_info), data.getContact()));
+        this.tvSeller.setText(String.format("%s:\n%s", getResources().getString(R.string.seller), data.getSeller_name()));
+        this.tvContact.setText(String.format("%s:\n%s", getResources().getString(R.string.contact_info), data.getContact()));
     }
 
     @Override
